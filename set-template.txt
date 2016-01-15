@@ -48,36 +48,37 @@ func (x *{{.Name}}) Toggle(t ...{{.BaseType}}) {{.Name}} {
 	return *x
 }
 
-// Contains returns true if the
+// Contains returns true if the t is set in x
 func (x {{.Name}}) Contains(t {{.BaseType}}) bool {
 	return {{.Underlying}}(x)&{{.Underlying}}(t) != 0
 }
 
-// Overlap returns the overlapping set bits
+// Overlap returns the overlapping bits
+// (AND binary operation)
 func (x {{.Name}}) Overlap(t {{.Name}}) {{.Name}} {
 	return {{.Name}}({{.Underlying}}(x) & {{.Underlying}}(t))
 }
 
 // Combine returns the combined bit sets
+// (OR binary operation)
 func (x {{.Name}}) Combine(t {{.Name}}) {{.Name}} {
 	return {{.Name}}({{.Underlying}}(x) | {{.Underlying}}(t))
 }
 
-// Same returns the bit values that are the same
+// Same returns the bit values that are the same.
+// (XOR binary operation)
 func (x {{.Name}}) Same(t {{.Name}}) {{.Name}} {
 	return {{.Name}}({{.Underlying}}(x) ^ {{.Underlying}}(t))
 }
 
-// SubsetOf will return true if all types of h
-// is present in the set c
+// SubsetOf will return true if all types of y
+// is present in the set x
 func (x {{.Name}}) SubsetOf(y {{.Name}}) bool {
 	return {{.Underlying}}(x)|{{.Underlying}}(y) == {{.Underlying}}(y)
 }
 
-// GetOne will return a {{.BaseType}} type.
-// Currently the first is returned, but it could be
-// improved to return the strongest.
-func (x {{.Name}}) GetOne() {{.BaseType}} {
+// First will return the first set {{.BaseType}}.
+func (x {{.Name}}) First() {{.BaseType}} {
 	v := {{.Underlying}}(x)
 	i := uint(0)
 	for v != 0 {

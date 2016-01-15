@@ -48,36 +48,37 @@ func (x *HashSet) Toggle(t ...Hash) HashSet {
 	return *x
 }
 
-// Contains returns true if the
+// Contains returns true if the t is set in x
 func (x HashSet) Contains(t Hash) bool {
 	return int(x)&int(t) != 0
 }
 
-// Overlap returns the overlapping set bits
+// Overlap returns the overlapping bits
+// (AND binary operation)
 func (x HashSet) Overlap(t HashSet) HashSet {
 	return HashSet(int(x) & int(t))
 }
 
 // Combine returns the combined bit sets
+// (OR binary operation)
 func (x HashSet) Combine(t HashSet) HashSet {
 	return HashSet(int(x) | int(t))
 }
 
-// Same returns the bit values that are the same
+// Same returns the bit values that are the same.
+// (XOR binary operation)
 func (x HashSet) Same(t HashSet) HashSet {
 	return HashSet(int(x) ^ int(t))
 }
 
-// SubsetOf will return true if all types of h
-// is present in the set c
+// SubsetOf will return true if all types of y
+// is present in the set x
 func (x HashSet) SubsetOf(y HashSet) bool {
 	return int(x)|int(y) == int(y)
 }
 
-// GetOne will return a Hash type.
-// Currently the first is returned, but it could be
-// improved to return the strongest.
-func (x HashSet) GetOne() Hash {
+// First will return the first set Hash.
+func (x HashSet) First() Hash {
 	v := int(x)
 	i := uint(0)
 	for v != 0 {
