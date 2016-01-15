@@ -15,70 +15,70 @@ var _ = {{.Name}}({{.BaseType}}(0))
 
 type {{.Name}} {{.Underlying}}
 
-// New{{.Name}} will create a new hash set with the hash types supplied
+// New{{.Name}} will create a new {{.BaseType}} set with the {{.BaseType}} types supplied
 func New{{.Name}}(t ...{{.BaseType}}) {{.Name}} {
-	h := {{.Name}}(0)
-	return h.Set(t...)
+	x := {{.Name}}(0)
+	return x.Set(t...)
 }
 
-// Set one or more hash types to the set.
-// Returns the modified hash set.
-func (h *{{.Name}}) Set(t ...{{.BaseType}}) {{.Name}} {
+// Set one or more {{.BaseType}} types to the set.
+// Returns the modified {{.BaseType}} set.
+func (x *{{.Name}}) Set(t ...{{.BaseType}}) {{.Name}} {
 	for _, v := range t {
-		*h |= {{.Name}}(v)
+		*x |= {{.Name}}(v)
 	}
-	return *h
+	return *x
 }
 
 // Clear one or more types from the set.
-// Returns the modified hash set.
-func (h *{{.Name}}) Clear(t ...{{.BaseType}}) {{.Name}} {
+// Returns the modified {{.BaseType}} set.
+func (x *{{.Name}}) Clear(t ...{{.BaseType}}) {{.Name}} {
 	for _, v := range t {
-		*h &= ^{{.Name}}(v)
+		*x &= ^{{.Name}}(v)
 	}
-	return *h
+	return *x
 }
 
 // Toggle one or more types from the set.
-// Returns the modified hash set.
-func (h *{{.Name}}) Toggle(t ...{{.BaseType}}) {{.Name}} {
+// Returns the modified {{.BaseType}} set.
+func (x *{{.Name}}) Toggle(t ...{{.BaseType}}) {{.Name}} {
 	for _, v := range t {
-		*h ^= {{.Name}}(v)
+		*x ^= {{.Name}}(v)
 	}
-	return *h
+	return *x
 }
 
 // Contains returns true if the
-func (h {{.Name}}) Contains(t {{.BaseType}}) bool {
-	return {{.Underlying}}(h)&{{.Underlying}}(t) != 0
+func (x {{.Name}}) Contains(t {{.BaseType}}) bool {
+	return {{.Underlying}}(x)&{{.Underlying}}(t) != 0
 }
 
 // Overlap returns the overlapping set bits
-func (h {{.Name}}) Overlap(t {{.Name}}) {{.Name}} {
-	return {{.Name}}({{.Underlying}}(h) & {{.Underlying}}(t))
+func (x {{.Name}}) Overlap(t {{.Name}}) {{.Name}} {
+	return {{.Name}}({{.Underlying}}(x) & {{.Underlying}}(t))
 }
 
 // Combine returns the combined bit sets
-func (h {{.Name}}) Combine(t {{.Name}}) {{.Name}} {
-	return {{.Name}}({{.Underlying}}(h) | {{.Underlying}}(t))
+func (x {{.Name}}) Combine(t {{.Name}}) {{.Name}} {
+	return {{.Name}}({{.Underlying}}(x) | {{.Underlying}}(t))
 }
 
 // Same returns the bit values that are the same
-func (h {{.Name}}) Same(t {{.Name}}) {{.Name}} {
-	return {{.Name}}({{.Underlying}}(h) ^ {{.Underlying}}(t))
+func (x {{.Name}}) Same(t {{.Name}}) {{.Name}} {
+	return {{.Name}}({{.Underlying}}(x) ^ {{.Underlying}}(t))
 }
 
 // SubsetOf will return true if all types of h
 // is present in the set c
-func (h {{.Name}}) SubsetOf(c {{.Name}}) bool {
-	return {{.Underlying}}(h)|{{.Underlying}}(c) == {{.Underlying}}(c)
+func (x {{.Name}}) SubsetOf(y {{.Name}}) bool {
+	return {{.Underlying}}(x)|{{.Underlying}}(y) == {{.Underlying}}(y)
 }
 
-// GetOne will return a hash type.
+// GetOne will return a {{.BaseType}} type.
 // Currently the first is returned, but it could be
 // improved to return the strongest.
-func (h {{.Name}}) GetOne() {{.BaseType}} {
-	v := {{.Underlying}}(h)
+func (x {{.Name}}) GetOne() {{.BaseType}} {
+	v := {{.Underlying}}(x)
 	i := uint(0)
 	for v != 0 {
 		if v&1 != 0 {
@@ -90,9 +90,9 @@ func (h {{.Name}}) GetOne() {{.BaseType}} {
 	return {{.BaseType}}(0)
 }
 
-// Array returns an array of all hash types in the set
-func (h {{.Name}}) Array() (ht []{{.BaseType}}) {
-	v := uint64(h)
+// Array returns an array of all {{.BaseType}} types in the set
+func (x {{.Name}}) Array() (ht []{{.BaseType}}) {
+	v := uint64(x)
 	i := uint(0)
 	for v != 0 {
 		if v&1 != 0 {
@@ -104,24 +104,24 @@ func (h {{.Name}}) Array() (ht []{{.BaseType}}) {
 	return ht
 }
 
-// Count returns the number of hash types in the set
-func (h {{.Name}}) Count() {{.Underlying}} {
-	if {{.Underlying}}(h) == 0 {
+// Count returns the number of {{.BaseType}} types in the set
+func (x {{.Name}}) Count() int {
+	if {{.Underlying}}(x) == 0 {
 		return 0
 	}
 	// credit: https://code.google.com/u/arnehormann/
-	x := uint64(h)
-	x -= (x >> 1) & 0x5555555555555555
-	x = (x>>2)&0x3333333333333333 + x&0x3333333333333333
-	x += x >> 4
-	x &= 0x0f0f0f0f0f0f0f0f
-	x *= 0x0101010101010101
-	return {{.Underlying}}(x >> 56)
+	y := uint64(x)
+	y -= (y >> 1) & 0x5555555555555555
+	y = (y>>2)&0x3333333333333333 + y&0x3333333333333333
+	y += y >> 4
+	y &= 0x0f0f0f0f0f0f0f0f
+	y *= 0x0101010101010101
+	return int(y >> 56)
 }
 
-// String returns a string representation of the hash set.
-func (h {{.Name}}) String() string {
-	a := h.Array()
+// String returns a string representation of the {{.BaseType}} set.
+func (x {{.Name}}) String() string {
+	a := x.Array()
 	var r []string
 	for _, v := range a {
 		s := fmt.Sprintf("%v", v)
