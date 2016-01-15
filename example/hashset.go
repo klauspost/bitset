@@ -11,92 +11,92 @@ var _ = uint64(int(0))
 
 
 // This will fail if the base type cannot be converted to a the new type.
-var _ = MySet(MyType(0))
+var _ = HashSet(Hash(0))
 
-type MySet int
+type HashSet int
 
-// NewMySet will create a new MyType set with the MyType types supplied
-func NewMySet(t ...MyType) MySet {
-	x := MySet(0)
+// NewHashSet will create a new Hash set with the Hash types supplied
+func NewHashSet(t ...Hash) HashSet {
+	x := HashSet(0)
 	return x.Set(t...)
 }
 
-// Set one or more MyType types to the set.
-// Returns the modified MyType set.
-func (x *MySet) Set(t ...MyType) MySet {
+// Set one or more Hash types to the set.
+// Returns the modified Hash set.
+func (x *HashSet) Set(t ...Hash) HashSet {
 	for _, v := range t {
-		*x |= MySet(v)
+		*x |= HashSet(v)
 	}
 	return *x
 }
 
 // Clear one or more types from the set.
-// Returns the modified MyType set.
-func (x *MySet) Clear(t ...MyType) MySet {
+// Returns the modified Hash set.
+func (x *HashSet) Clear(t ...Hash) HashSet {
 	for _, v := range t {
-		*x &= ^MySet(v)
+		*x &= ^HashSet(v)
 	}
 	return *x
 }
 
 // Toggle one or more types from the set.
-// Returns the modified MyType set.
-func (x *MySet) Toggle(t ...MyType) MySet {
+// Returns the modified Hash set.
+func (x *HashSet) Toggle(t ...Hash) HashSet {
 	for _, v := range t {
-		*x ^= MySet(v)
+		*x ^= HashSet(v)
 	}
 	return *x
 }
 
 // Contains returns true if the
-func (x MySet) Contains(t MyType) bool {
+func (x HashSet) Contains(t Hash) bool {
 	return int(x)&int(t) != 0
 }
 
 // Overlap returns the overlapping set bits
-func (x MySet) Overlap(t MySet) MySet {
-	return MySet(int(x) & int(t))
+func (x HashSet) Overlap(t HashSet) HashSet {
+	return HashSet(int(x) & int(t))
 }
 
 // Combine returns the combined bit sets
-func (x MySet) Combine(t MySet) MySet {
-	return MySet(int(x) | int(t))
+func (x HashSet) Combine(t HashSet) HashSet {
+	return HashSet(int(x) | int(t))
 }
 
 // Same returns the bit values that are the same
-func (x MySet) Same(t MySet) MySet {
-	return MySet(int(x) ^ int(t))
+func (x HashSet) Same(t HashSet) HashSet {
+	return HashSet(int(x) ^ int(t))
 }
 
 // SubsetOf will return true if all types of h
 // is present in the set c
-func (x MySet) SubsetOf(y MySet) bool {
+func (x HashSet) SubsetOf(y HashSet) bool {
 	return int(x)|int(y) == int(y)
 }
 
-// GetOne will return a MyType type.
+// GetOne will return a Hash type.
 // Currently the first is returned, but it could be
 // improved to return the strongest.
-func (x MySet) GetOne() MyType {
+func (x HashSet) GetOne() Hash {
 	v := int(x)
 	i := uint(0)
 	for v != 0 {
 		if v&1 != 0 {
-			return MyType(1 << i)
+			return Hash(1 << i)
 		}
 		i++
 		v >>= 1
 	}
-	return MyType(0)
+	return Hash(0)
 }
 
-// Array returns an array of all MyType types in the set
-func (x MySet) Array() (ht []MyType) {
+// Array returns an array of all Hash types in the set
+func (x HashSet) Array() (ht []Hash) {
 	v := uint64(x)
 	i := uint(0)
 	for v != 0 {
 		if v&1 != 0 {
-			ht = append(ht, MyType(1<<i))
+			ht = append(ht, Hash(1<<i))
 		}
 		i++
 		v >>= 1
@@ -104,8 +104,8 @@ func (x MySet) Array() (ht []MyType) {
 	return ht
 }
 
-// Count returns the number of MyType types in the set
-func (x MySet) Count() int {
+// Count returns the number of Hash types in the set
+func (x HashSet) Count() int {
 	if int(x) == 0 {
 		return 0
 	}
@@ -119,8 +119,8 @@ func (x MySet) Count() int {
 	return int(y >> 56)
 }
 
-// String returns a string representation of the MyType set.
-func (x MySet) String() string {
+// String returns a string representation of the Hash set.
+func (x HashSet) String() string {
 	a := x.Array()
 	var r []string
 	for _, v := range a {

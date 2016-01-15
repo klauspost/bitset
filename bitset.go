@@ -1,8 +1,8 @@
 package main
 
-// Example: go generate >example/myset.go
+// Example: go generate >example/hashset.go
 
-//go:generate go run bitset.go MySet MyType example int
+//go:generate go run bitset.go HashSet Hash example int
 
 import (
 	"flag"
